@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.config.*;
@@ -30,9 +31,10 @@ public class Main {
         // использовать границы; и простой T примерно такой же, как «T extends Object». Затем Джексон свяжет объекты
         // JSON как карты.
         //В этом случае метод тестера должен иметь доступ к классу, и вы можете построить
-        JavaType type = mapper.getTypeFactory().
-                constructCollectionType(List.class, Cat.class);
-        List<Cat> posts = mapper.readValue(response.getEntity().getContent(), type); //new TypeReference<List<Cat>>() {}
+//        JavaType type = mapper.getTypeFactory().
+//                constructCollectionType(List.class, Cat.class);
+        List<Cat> posts = mapper.readValue(response.getEntity().getContent(), new TypeReference<List<Cat>>() {});
+        //либо же вместо new TypeReference<List<Cat>>() {} ===== type (из строки 34)
         posts.stream()
                 .filter(x -> x.getUpvotes() != 0 && x.getUpvotes() > 0)
                 .forEach(System.out::println);
